@@ -6,4 +6,6 @@ Live demo:- https://neighbourhood-bookstore.vercel.app/
 
 
 Attributions:-
+
+Base project repo copied from:-
 https://github.com/shashiirk/tiptop
