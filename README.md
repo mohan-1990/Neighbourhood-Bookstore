@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://tiptopstore.vercel.app">
-    <img alt="logo" src="public/logo.svg" width="60" />
+    <img alt="logo" src="public/logo.jpeg" width="60" />
   </a>
   <h1 align="center">
     Tiptop
@@ -38,3 +38,4 @@ See it live [here](https://tiptopstore.vercel.app).
 ## Licence
 
 This project is licensed under [MIT](LICENSE).
+# Neighbourhood bookstore is an online bookstore application. Project done for Ethlas take home assignment. Built on Next js and Google Firebase
