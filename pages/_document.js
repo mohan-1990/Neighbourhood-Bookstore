@@ -8,7 +8,7 @@ export default function Document() {
         <meta name="description" content="Online book shopping" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://neighbourhood-bookstore.vercel.app" />
-        <meta property="og:title" content="Tiptop" />
+        <meta property="og:title" content="Neighbourhood bookstore" />
         <meta property="og:description" content="Online book shopping" />
         <meta
           property="og:image"
@@ -16,7 +16,7 @@ export default function Document() {
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://neighbourhood-bookstore.vercel.app" />
-        <meta name="twitter:title" content="Tiptop" />
+        <meta name="twitter:title" content="Neighbourhood bookstore" />
         <meta name="twitter:description" content="Online book shopping" />
         <meta
           name="twitter:image"
