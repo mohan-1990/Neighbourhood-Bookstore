@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { arrayUnion, arrayRemove } from 'firebase/firestore';
 
 import { CloseIcon } from '../assets/icons';
 import BetterLink from './BetterLink';
 import { useSelector } from 'react-redux';
-import { db } from '../services/firebase/config';
+import { setCart, setWishlist } from '../services/firebase/dataAccess';
 import { getFormattedCurrency } from '../utils/getFormattedCurrency';
 
 const Div = styled.div`
@@ -170,19 +170,19 @@ const WishlistItemCard = ({
   const isInCart = !!cartItem;
 
   const deleteItemHandler = () => {
-    updateDoc(doc(db, 'wishlist', user.uid), {
-      items: arrayRemove({ itemId: id }),
-    }).catch((error) => console.log(error));
+      setWishlist(user.uid,
+        arrayRemove({ itemId: id })
+    ).catch((error) => console.log(error));
   };
 
   const removeItemHandler = () => {
-    updateDoc(doc(db, 'wishlist', user.uid), {
-      items: arrayRemove({ itemId: id}),
+    setWishlist(user.uid,
+      arrayRemove({ itemId: id})
+    )
+    .then(() => {
+      setImage(imageURL);
     })
-      .then(() => {
-        setImage(imageURL);
-      })
-      .catch((error) => console.log(error));
+    .catch((error) => console.log(error));
   };
 
   const moveToCartHandler = (ev, fromModal = false) => {
@@ -193,24 +193,21 @@ const WishlistItemCard = ({
       };
       const updatedItems = [...cartItems];
       updatedItems.splice(cartItemIndex, 1, updatedItem);
-      updateDoc(doc(db, 'cart', user.uid), {
-        items: updatedItems,
+      setCart(user.uid, updatedItems)
+      .then(() => {
+        removeItemHandler();
       })
-        .then(() => {
-          removeItemHandler();
-        })
-        .catch((error) => console.log(error));
+      .catch((error) => console.log(error));
     } else {
-      updateDoc(doc(db, 'cart', user.uid), {
-        items: arrayUnion({
+      setCart(user.uid, arrayUnion({
           itemId: id,
           itemQuantity: '1',
-        }),
-      })
-        .then(() => {
-          removeItemHandler();
         })
-        .catch((error) => console.log(error));
+      )
+      .then(() => {
+        removeItemHandler();
+      })
+      .catch((error) => console.log(error));
     }
   };
 

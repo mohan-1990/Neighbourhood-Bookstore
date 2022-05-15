@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
-
 import EmptyWishlist from '../components/EmptyWishlist';
 import SignInPromptTemplate from '../components/SignInPromptTemplate';
 import WishlistItemCard from '../components/WishlistItemCard';

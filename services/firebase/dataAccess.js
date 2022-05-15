@@ -46,7 +46,7 @@ export const setAccount = async (uid, nameInput, emailInput) => {
 export const setWishlist = async (uid, items) => {
     try {
         await setDoc(doc(db, 'wishlist', uid), {
-            items: [],
+            items: items,
         });
     }
     catch(error) {
@@ -57,7 +57,18 @@ export const setWishlist = async (uid, items) => {
 export const setCart = async (uid, items) => {
     try {
         await setDoc(doc(db, 'cart', uid), {
-            items: [],
+            items: items,
+        });
+    }
+    catch(error) {
+        console.log("Error setting cart for uid: " + uid, error);
+    }
+};
+
+export const setOrder = async (orderId, params) => {
+    try {
+        await setDoc(doc(db, 'orders', orderId), {
+            ...params
         });
     }
     catch(error) {

@@ -3,15 +3,13 @@ import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import Head from 'next/head';
 import styled, { keyframes } from 'styled-components';
-import { setDoc, doc, updateDoc } from 'firebase/firestore';
 import uniqid from 'uniqid';
-
 import EmptyCart from '../components/EmptyCart';
 import CartItemCard from '../components/CartItemCard';
 import SignInPromptTemplate from '../components/SignInPromptTemplate';
 import getItemById from '../utils/getItemById';
 import OrderPlaced from '../components/OrderPlaced';
-import { db } from '../services/firebase/config';
+import { setCart, setOrder } from '../services/firebase/dataAccess';
 
 const MainNav = styled.div`
   font-size: 14px;
@@ -178,18 +176,16 @@ const Cart = () => {
   const placeOrderHandler = () => {
     setIsPlacingOrder(true);
     let orderId = user.uid + '_' + new Date().getMilliseconds();
-    setDoc(doc(db, 'orders', orderId), {
+    let order = {
       userId: user.uid,
       items: cartItems,
       totalPrice: totalValue,
       date: new Date().toUTCString(),
       status: 'Order Placed'
-    }).then(() => {
+    };
+    setOrder(orderId, order).then(() => {
       setIsOrderPlaced(true);
-
-      updateDoc(doc(db, 'cart', user.uid), {
-        items: [],
-      }).then(() => {
+      setCart(user.uid, []).then(() => {
         setIsPlacingOrder(false);
       });
     });
