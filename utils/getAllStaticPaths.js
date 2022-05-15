@@ -1,8 +1,9 @@
-import data from '../pages/api/data.json';
+import { getAllBooks } from '../services/firebase/dataAccess';
 
-const getAllStaticPaths = () => {
-  return data.clothes.map((item) => ({
-    params: { cid: item.id },
+const getAllStaticPaths = async () => {
+  const books = await getAllBooks();
+  return books.map((item) => ({
+    params: { cid: item.id.toString() },
   }));
 };
 

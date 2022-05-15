@@ -33,15 +33,15 @@ const Div = styled.div`
   }
 `;
 
-const BrandFilter = ({ items }) => {
+const PublisherFilter = ({ items }) => {
   return (
     <Div>
-      <div className="heading">Brand</div>
+      <div className="heading">Publisher</div>
       {items
         .sort((a, b) => a.localeCompare(b))
         .map((value, index) => (
           <div className="item" key={index}>
-            <CheckBox of={value} type="brand" />
+            <CheckBox of={value} type="publisher" />
             <span className="text">{value}</span>
           </div>
         ))}
@@ -49,4 +49,4 @@ const BrandFilter = ({ items }) => {
   );
 };
 
-export default BrandFilter;
+export default PublisherFilter;

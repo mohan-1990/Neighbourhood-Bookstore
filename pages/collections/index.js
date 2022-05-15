@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import BrandFilter from '../../components/BrandFilter';
+import PublisherFilter from '../../components/PublisherFilter';
 import CategoryFilter from '../../components/CategoryFilter';
 import ItemCard from '../../components/ItemCard';
 import SortSelect from '../../components/SortSelect';
@@ -17,7 +17,6 @@ const MainNav = styled.div`
   font-size: 14px;
   background-color: #f4f4f4;
   padding: 16px;
-  text-align: center;
 
   a {
     text-decoration: none;
@@ -59,7 +58,7 @@ const Div = styled.div`
       }
     }
 
-    .clothes {
+    .books {
       margin: 16px 0;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -69,7 +68,7 @@ const Div = styled.div`
 
   @media (max-width: 1024px) {
     .main {
-      .clothes {
+      .books {
         grid-template-columns: repeat(3, 1fr);
       }
     }
@@ -77,7 +76,7 @@ const Div = styled.div`
 
   @media (max-width: 768px) {
     .main {
-      .clothes {
+      .books {
         grid-template-columns: repeat(2, 1fr);
       }
     }
@@ -93,37 +92,38 @@ const Div = styled.div`
         }
       }
 
-      .clothes {
+      .books {
         margin-bottom: 0;
       }
     }
   }
 `;
 
-const Products = ({ clothes, brands, categories }) => {
+const Products = ({ books, publishers, categories }) => {
+  console.log("Publishers: " + JSON.stringify(publishers));
   const [width, setWidth] = useState(window.innerWidth);
-  const filteredBrands = useSelector((state) => state.filter.brands);
+  const filteredPublishers = useSelector((state) => state.filter.publishers);
   const filteredCategories = useSelector((state) => state.filter.categories);
   const filteredSort = useSelector((state) => state.filter.sort);
 
-  let filteredClothes;
+  let filteredBooks;
 
-  filteredClothes =
-    filteredBrands.length > 0
-      ? [...clothes].filter((value) => filteredBrands.includes(value.brand))
-      : [...clothes];
+  filteredBooks =
+    filteredPublishers.length > 0
+      ? [...books].filter((value) => filteredPublishers.includes(value.publisher))
+      : [...books];
 
-  filteredClothes =
+  filteredBooks =
     filteredCategories.length > 0
-      ? filteredClothes.filter((value) =>
+      ? filteredBooks.filter((value) =>
           filteredCategories.includes(value.category)
         )
-      : filteredClothes;
+      : filteredBooks;
 
   if (filteredSort === 'price_high_to_low') {
-    filteredClothes = filteredClothes.sort((a, b) => +b.amount - +a.amount);
+    filteredBooks = filteredBooks.sort((a, b) => +b.price - +a.price);
   } else if (filteredSort === 'price_low_to_high') {
-    filteredClothes = filteredClothes.sort((a, b) => +a.amount - +b.amount);
+    filteredBooks = filteredBooks.sort((a, b) => +a.price - +b.price);
   }
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const Products = ({ clothes, brands, categories }) => {
         {width > 640 && (
           <aside className="aside">
             <div className="title">Filters</div>
-            <BrandFilter items={brands} />
+            <PublisherFilter items={publishers} />
             <CategoryFilter items={categories} />
           </aside>
         )}
@@ -159,13 +159,13 @@ const Products = ({ clothes, brands, categories }) => {
             ) : (
               <div className="sort-filter">
                 <SmallSort />
-                <SmallFilter brandItems={brands} categoryItems={categories} />
+                <SmallFilter publisherItems={publishers} categoryItems={categories} />
               </div>
             )}
           </div>
-          {filteredClothes.length > 0 ? (
-            <div className="clothes">
-              {filteredClothes.map((item, index) => (
+          {filteredBooks.length > 0 ? (
+            <div className="books">
+              {filteredBooks.map((item, index) => (
                 <ItemCard key={item.id} {...item} setPriority={index < 8} />
               ))}
             </div>
@@ -178,12 +178,13 @@ const Products = ({ clothes, brands, categories }) => {
   );
 };
 
-export const getStaticProps = (context) => {
-  const items = getItems();
+export const getStaticProps = async (context) => {
 
-  const brands = items.reduce((previous, current) => {
-    if (!previous.includes(current.brand)) {
-      previous.push(current.brand);
+  const items = await getItems();
+
+  const publishers = items.reduce((previous, current) => {
+    if (!previous.includes(current.publisher)) {
+      previous.push(current.publisher);
     }
 
     return previous;
@@ -199,8 +200,8 @@ export const getStaticProps = (context) => {
 
   return {
     props: {
-      clothes: items,
-      brands,
+      books: items,
+      publishers,
       categories,
     },
   };

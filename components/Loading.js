@@ -35,7 +35,7 @@ const Div = styled.div`
       left: 0;
       height: 100%;
       width: 50%;
-      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      background: linear-gradient(to right, #64b0f1, #0d67b5);
       animation: ${loading} 2000ms infinite;
     }
   }

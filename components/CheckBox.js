@@ -16,8 +16,8 @@ const Button = styled.button`
   cursor: pointer;
 
   &.checked {
-    border-color: #4a00e0;
-    background-color: #4a00e0;
+    border-color: #0d67b5;
+    background-color: #0d67b5;
     color: white;
     display: flex;
     justify-content: center;
@@ -35,8 +35,8 @@ const CheckBox = ({ of, type }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (type === 'brand') {
-      if (filters.brands.includes(of)) {
+    if (type === 'publisher') {
+      if (filters.publishers.includes(of)) {
         setIsChecked(true);
       }
     } else if (type === 'category') {
@@ -48,14 +48,14 @@ const CheckBox = ({ of, type }) => {
 
   const clickHandler = () => {
     if (isChecked) {
-      if (type === 'brand') {
-        dispatch(filterActions.deselectBrand(of));
+      if (type === 'publisher') {
+        dispatch(filterActions.deselectPublisher(of));
       } else if (type === 'category') {
         dispatch(filterActions.deselectCategory(of));
       }
     } else {
-      if (type === 'brand') {
-        dispatch(filterActions.selectBrand(of));
+      if (type === 'publisher') {
+        dispatch(filterActions.selectPublisher(of));
       } else if (type === 'category') {
         dispatch(filterActions.selectCategory(of));
       }

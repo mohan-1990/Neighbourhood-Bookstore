@@ -29,9 +29,9 @@ const Div = styled.div`
 
     .sign {
       display: inline-block;
-      border: 1px #4a00e0 solid;
+      border: 1px #0d67b5 solid;
       border-radius: 6px;
-      color: #4a00e0;
+      color: #0d67b5;
       padding: 4px 12px;
       margin: 10px 0 6px 0;
       cursor: pointer;

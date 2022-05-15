@@ -14,7 +14,6 @@ const MainNav = styled.div`
   font-size: 14px;
   background-color: #f4f4f4;
   padding: 16px;
-  text-align: center;
 
   a {
     text-decoration: none;
@@ -103,7 +102,7 @@ const Div = styled.div`
           }
 
           &:focus {
-            border-color: #4a00e0;
+            border-color: #0d67b5;
           }
         }
 
@@ -129,9 +128,9 @@ const Div = styled.div`
       button {
         font: inherit;
         border-radius: 6px;
-        background: #8e2de2;
-        background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-        background: linear-gradient(to right, #8e2de2, #4a00e0);
+        background: #64b0f1;
+        background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+        background: linear-gradient(to right, #64b0f1, #0d67b5);
         color: white;
         font-weight: 500;
         display: flex;
@@ -177,7 +176,7 @@ const Div = styled.div`
         border: none;
         outline: none;
         background-color: white;
-        color: #4a00e0;
+        color: #0d67b5;
         cursor: pointer;
 
         @media (hover: hover) {
@@ -208,7 +207,7 @@ const Div = styled.div`
 
       a {
         text-decoration: none;
-        color: #4a00e0;
+        color: #0d67b5;
 
         @media (hover: hover) {
           &:hover {
@@ -265,6 +264,7 @@ const SignIn = () => {
   };
 
   const submitHandler = (ev) => {
+
     ev.preventDefault();
 
     setStartEmailValidation(true);
@@ -294,7 +294,8 @@ const SignIn = () => {
 
   const signInAsGuestHandler = () => {
     setIsGuestLoading(true);
-    signInWithEmailAndPassword(auth, 'lovelyguest@fakemail.com', 'lovelyguest')
+    signInWithEmailAndPassword(auth, process.env.NEXT_PUBLIC_GUEST_EMAIL, 
+      process.env.NEXT_PUBLIC_GUEST_PWD)
       .then((user) => {})
       .catch((error) => {
         const errorCode = error.code;

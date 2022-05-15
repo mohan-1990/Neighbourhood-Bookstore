@@ -3,16 +3,16 @@ import { createSlice } from '@reduxjs/toolkit';
 const filterSlice = createSlice({
   name: 'filter',
   initialState: {
-    brands: [],
+    publishers: [],
     categories: [],
     sort: 'default',
   },
   reducers: {
-    selectBrand(state, action) {
-      state.brands.push(action.payload);
+    selectPublisher(state, action) {
+      state.publishers.push(action.payload);
     },
-    deselectBrand(state, action) {
-      state.brands = state.brands.filter((value) => value !== action.payload);
+    deselectPublisher(state, action) {
+      state.publishers = state.publishers.filter((value) => value !== action.payload);
     },
     selectCategory(state, action) {
       state.categories.push(action.payload);

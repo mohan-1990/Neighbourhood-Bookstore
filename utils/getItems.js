@@ -1,4 +1,4 @@
-import data from '../pages/api/data.json';
+import { getAllBooks } from '../services/firebase/dataAccess';
 
 // Shuffle the items
 const shuffle = (array) => {
@@ -21,8 +21,9 @@ const shuffle = (array) => {
   return array;
 };
 
-const getItems = () => {
-  return shuffle(data.clothes);
+const getItems = async () => {
+  const books = await getAllBooks();
+  return shuffle(books);
 };
 
 export default getItems;

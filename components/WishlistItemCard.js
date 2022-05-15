@@ -7,9 +7,6 @@ import { CloseIcon } from '../assets/icons';
 import BetterLink from './BetterLink';
 import { useSelector } from 'react-redux';
 import { db } from '../services/firebase-config';
-import Modal from './Modal';
-import SizePickerForBottoms from './SizePickerForBottoms';
-import SizePickerForTops from './SizePickerForTops';
 import { getFormattedCurrency } from '../utils/getFormattedCurrency';
 
 const Div = styled.div`
@@ -49,7 +46,7 @@ const Div = styled.div`
     .info {
       padding: 8px;
 
-      .brand {
+      .publisher {
         font-weight: 500;
       }
 
@@ -68,7 +65,7 @@ const Div = styled.div`
     font: inherit;
     font-weight: 500;
     background-color: white;
-    color: #4a00e0;
+    color: #0d67b5;
     display: block;
     outline: none;
     cursor: pointer;
@@ -83,7 +80,7 @@ const ModalDiv = styled.div`
   padding: 16px;
 
   .title {
-    color: #4a00e0;
+    color: #0d67b5;
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 32px;
@@ -113,8 +110,8 @@ const ModalDiv = styled.div`
       cursor: pointer;
 
       &.active {
-        border-color: #4a00e0;
-        color: #4a00e0;
+        border-color: #0d67b5;
+        color: #0d67b5;
       }
 
       &:last-child {
@@ -125,7 +122,7 @@ const ModalDiv = styled.div`
         transition: border 240ms;
 
         &:hover {
-          border-color: #4a00e0;
+          border-color: #0d67b5;
         }
       }
     }
@@ -134,9 +131,9 @@ const ModalDiv = styled.div`
   .done {
     font: inherit;
     border-radius: 6px;
-    background: #8e2de2;
-    background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: #64b0f1;
+    background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+    background: linear-gradient(to right, #64b0f1, #0d67b5);
     color: white;
     font-weight: 500;
     display: flex;
@@ -154,46 +151,33 @@ const ModalDiv = styled.div`
 
 const WishlistItemCard = ({
   id,
-  size,
   imageURL,
-  brand,
+  publisher,
+  author,
   name,
-  amount,
+  price,
   category,
   setImage,
 }) => {
-  const [pickedSize, setPickedSize] = useState('');
-  const [showSizePicker, setShowSizePicker] = useState(false);
-  const [promptSize, setPromptSize] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const cartItems = useSelector((state) => state.cart.items);
   const cartItem = cartItems.find(
-    (item) => item.itemId === id && item.itemSize === size
+    (item) => item.itemId === id
   );
   const cartItemIndex = cartItems.findIndex(
-    (item) => item.itemId === id && item.itemSize === size
+    (item) => item.itemId === id
   );
   const isInCart = !!cartItem;
 
-  const openSizePickerHandler = () => {
-    setShowSizePicker(true);
-  };
-
-  const closeSizePickerHandler = () => {
-    setPickedSize('');
-    setShowSizePicker(false);
-    setPromptSize(false);
-  };
-
   const deleteItemHandler = () => {
-    updateDoc(doc(db, user.uid, 'wishlist'), {
-      items: arrayRemove({ itemId: id, itemSize: size }),
+    updateDoc(doc(db, 'wishlist', user.uid), {
+      items: arrayRemove({ itemId: id }),
     }).catch((error) => console.log(error));
   };
 
   const removeItemHandler = () => {
-    updateDoc(doc(db, user.uid, 'wishlist'), {
-      items: arrayRemove({ itemId: id, itemSize: size }),
+    updateDoc(doc(db, 'wishlist', user.uid), {
+      items: arrayRemove({ itemId: id}),
     })
       .then(() => {
         setImage(imageURL);
@@ -202,76 +186,31 @@ const WishlistItemCard = ({
   };
 
   const moveToCartHandler = (ev, fromModal = false) => {
-    if (size) {
-      if (isInCart) {
-        const updatedItem = {
-          ...cartItem,
-          itemQuantity: (+cartItem.itemQuantity + 1).toString(),
-        };
-        const updatedItems = [...cartItems];
-        updatedItems.splice(cartItemIndex, 1, updatedItem);
-        updateDoc(doc(db, user.uid, 'cart'), {
-          items: updatedItems,
+    if (isInCart) {
+      const updatedItem = {
+        ...cartItem,
+        itemQuantity: (+cartItem.itemQuantity + 1).toString(),
+      };
+      const updatedItems = [...cartItems];
+      updatedItems.splice(cartItemIndex, 1, updatedItem);
+      updateDoc(doc(db, 'cart', user.uid), {
+        items: updatedItems,
+      })
+        .then(() => {
+          removeItemHandler();
         })
-          .then(() => {
-            removeItemHandler();
-          })
-          .catch((error) => console.log(error));
-      } else {
-        updateDoc(doc(db, user.uid, 'cart'), {
-          items: arrayUnion({
-            itemId: id,
-            itemSize: size,
-            itemQuantity: '1',
-          }),
-        })
-          .then(() => {
-            removeItemHandler();
-          })
-          .catch((error) => console.log(error));
-      }
-    } else if (pickedSize) {
-      const cartItem = cartItems.find(
-        (item) => item.itemId === id && item.itemSize === pickedSize
-      );
-      const cartItemIndex = cartItems.findIndex(
-        (item) => item.itemId === id && item.itemSize === pickedSize
-      );
-      const isInCart = !!cartItem;
-
-      if (isInCart) {
-        const updatedItem = {
-          ...cartItem,
-          itemQuantity: (+cartItem.itemQuantity + 1).toString(),
-        };
-        const updatedItems = [...cartItems];
-        updatedItems.splice(cartItemIndex, 1, updatedItem);
-        updateDoc(doc(db, user.uid, 'cart'), {
-          items: updatedItems,
-        })
-          .then(() => {
-            removeItemHandler();
-          })
-          .catch((error) => console.log(error));
-      } else {
-        updateDoc(doc(db, user.uid, 'cart'), {
-          items: arrayUnion({
-            itemId: id,
-            itemSize: pickedSize,
-            itemQuantity: '1',
-          }),
-        })
-          .then(() => {
-            removeItemHandler();
-          })
-          .catch((error) => console.log(error));
-      }
+        .catch((error) => console.log(error));
     } else {
-      if (fromModal) {
-        setPromptSize(true);
-      } else {
-        openSizePickerHandler();
-      }
+      updateDoc(doc(db, 'cart', user.uid), {
+        items: arrayUnion({
+          itemId: id,
+          itemQuantity: '1',
+        }),
+      })
+        .then(() => {
+          removeItemHandler();
+        })
+        .catch((error) => console.log(error));
     }
   };
 
@@ -291,10 +230,10 @@ const WishlistItemCard = ({
             />
           </BetterLink>
           <div className="info">
-            <div className="brand">{brand}</div>
+            <div className="brand">{publisher}</div>
             <div className="name">{name}</div>
             <div className="amount">{`Rs. ${getFormattedCurrency(
-              amount
+              price
             )}`}</div>
           </div>
         </div>
@@ -302,33 +241,6 @@ const WishlistItemCard = ({
           Move to Cart
         </button>
       </Div>
-      {showSizePicker && (
-        <Modal closeHandler={closeSizePickerHandler}>
-          <ModalDiv>
-            <div className="title">Select size</div>
-            {promptSize && <div className="error">Please select a size</div>}
-            <div className="sizes">
-              {category === 'Jeans' ? (
-                <SizePickerForBottoms
-                  currentSize={pickedSize}
-                  onSetSize={setPickedSize}
-                />
-              ) : (
-                <SizePickerForTops
-                  currentSize={pickedSize}
-                  onSetSize={setPickedSize}
-                />
-              )}
-            </div>
-            <button
-              className="done"
-              onClick={moveToCartHandler.bind(this, true)}
-            >
-              Done
-            </button>
-          </ModalDiv>
-        </Modal>
-      )}
     </>
   );
 };

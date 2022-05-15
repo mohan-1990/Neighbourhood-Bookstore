@@ -32,7 +32,7 @@ const Div = styled.div`
     .info {
       padding: 8px;
 
-      .brand {
+      .publisher {
         font-weight: 500;
       }
 
@@ -116,7 +116,7 @@ const Div = styled.div`
     font: inherit;
     font-weight: 500;
     background-color: white;
-    color: #4a00e0;
+    color: #0d67b5;
     display: block;
     outline: none;
     cursor: pointer;
@@ -139,7 +139,7 @@ const ModalDiv = styled.div`
   padding: 16px;
 
   .title {
-    color: #4a00e0;
+    color: #0d67b5;
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 32px;
@@ -166,8 +166,8 @@ const ModalDiv = styled.div`
       cursor: pointer;
 
       &.active {
-        border-color: #4a00e0;
-        color: #4a00e0;
+        border-color: #0d67b5;
+        color: #0d67b5;
       }
 
       &:last-child {
@@ -178,7 +178,7 @@ const ModalDiv = styled.div`
         transition: border 240ms;
 
         &:hover {
-          border-color: #4a00e0;
+          border-color: #0d67b5;
         }
       }
     }
@@ -188,11 +188,10 @@ const ModalDiv = styled.div`
 const CartItemCard = ({
   index,
   id,
-  size,
+  publisher,
   imageURL,
-  brand,
   name,
-  amount,
+  price,
   quantity,
 }) => {
   const [showQuantityPicker, setShowQuantityPicker] = useState(false);
@@ -200,30 +199,10 @@ const CartItemCard = ({
   const user = useSelector((state) => state.auth.user);
   const cartItems = useSelector((state) => state.cart.items);
 
-  // useEffect(() => {
-  //   const item = cartItems.find((item) => item.itemId === id);
-  //   const updatedItem = {
-  //     ...item,
-  //     itemQuantity: currentQuantity,
-  //   };
-  //   const updatedItems = [...cartItems];
-  //   updatedItems.splice(index, 1, updatedItem);
-  //   updateDoc(doc(db, user.uid, 'cart'), {
-  //     items: updatedItems,
-  //   })
-  //     .then(() => {
-  //       console.log('cart.js // 216');
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [currentQuantity]);
-
   const removeItemHandler = () => {
-    updateDoc(doc(db, user.uid, 'cart'), {
+    updateDoc(doc(db, 'cart', user.uid), {
       items: arrayRemove({
         itemId: id,
-        itemSize: size,
         itemQuantity: currentQuantity,
       }),
     })
@@ -242,7 +221,7 @@ const CartItemCard = ({
   const setQuantityHandler = (selectedQuantity) => {
     setCurrentQuantity(selectedQuantity);
     const item = cartItems.find(
-      (item) => item.itemId === id && item.itemSize === size
+      (item) => item.itemId === id
     );
     const updatedItem = {
       ...item,
@@ -250,7 +229,7 @@ const CartItemCard = ({
     };
     const updatedItems = [...cartItems];
     updatedItems.splice(index, 1, updatedItem);
-    updateDoc(doc(db, user.uid, 'cart'), {
+    updateDoc(doc(db, 'cart', user.uid), {
       items: updatedItems,
     })
       .then(() => {})
@@ -272,10 +251,9 @@ const CartItemCard = ({
             />
           </BetterLink>
           <div className="info">
-            <div className="brand">{brand}</div>
+            <div className="publisher">{publisher}</div>
             <div className="name">{name}</div>
             <div className="actions">
-              <button>Size: {size}</button>
               <button className="quantity" onClick={openQuantityPickerHandler}>
                 <span>Quantity: {currentQuantity}</span>
                 <ChevronDownIcon />
@@ -284,7 +262,7 @@ const CartItemCard = ({
             <div className="amount">
               <span>{quantity}</span>
               <CloseIcon />
-              <span>{`Rs. ${getFormattedCurrency(amount)}`}</span>
+              <span>{`Rs. ${getFormattedCurrency(price)}`}</span>
             </div>
           </div>
           <button className="delete" onClick={removeItemHandler}>

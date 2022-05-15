@@ -16,7 +16,7 @@ const Div = styled.div`
   .info {
     padding: 8px;
 
-    .brand {
+    .publisher {
       font-weight: 500;
     }
 
@@ -31,7 +31,7 @@ const Div = styled.div`
   }
 `;
 
-const ItemCard = ({ id, imageURL, brand, name, amount, setPriority }) => {
+const ItemCard = ({ id, imageURL, publisher, name, price, setPriority }) => {
   return (
     <Div>
       <BetterLink href={`/collections/${id}`}>
@@ -43,9 +43,9 @@ const ItemCard = ({ id, imageURL, brand, name, amount, setPriority }) => {
           priority={setPriority}
         />
         <div className="info">
-          <div className="brand">{brand}</div>
+          <div className="publisher">{publisher}</div>
           <div className="name">{name}</div>
-          <div className="amount">{`Rs. ${getFormattedCurrency(amount)}`}</div>
+          <div className="amount">{`Rs. ${getFormattedCurrency(price)}`}</div>
         </div>
       </BetterLink>
     </Div>

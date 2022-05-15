@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import Head from 'next/head';
 import styled, { keyframes } from 'styled-components';
-import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import { setDoc, doc, updateDoc } from 'firebase/firestore';
 import uniqid from 'uniqid';
 
 import EmptyCart from '../components/EmptyCart';
@@ -17,7 +17,6 @@ const MainNav = styled.div`
   font-size: 14px;
   background-color: #f4f4f4;
   padding: 16px;
-  text-align: center;
 
   a {
     text-decoration: none;
@@ -86,9 +85,9 @@ const Div = styled.div`
       .order {
         font: inherit;
         border-radius: 10px;
-        background: #8e2de2;
-        background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-        background: linear-gradient(to right, #8e2de2, #4a00e0);
+        background: #64b0f1;
+        background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+        background: linear-gradient(to right, #64b0f1, #0d67b5);
         color: white;
         font-size: 16px;
         font-weight: 500;
@@ -144,31 +143,33 @@ const Div = styled.div`
 `;
 
 const Cart = () => {
-  const [clothes, setClothes] = useState([]);
+  const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const cartItems = useSelector((state) => state.cart.items);
 
-  useEffect(() => {
-    const items = cartItems.map((item) => {
-      const itemDetails = getItemById(item.itemId);
-      return {
-        size: item.itemSize,
-        quantity: item.itemQuantity,
-        ...itemDetails,
-      };
-    });
+  useEffect(async () => {
 
-    setClothes(() => {
+    const items = await Promise.all(
+      cartItems.map(async (item) => {
+        const itemDetails = await getItemById(item.itemId);
+        return {
+          quantity: item.itemQuantity,
+          ...itemDetails,
+        };
+      })
+    );
+
+    setBooks(() => {
       setIsLoading(false);
       return items;
     });
   }, [cartItems]);
 
-  const priceValue = clothes.reduce(
-    (prev, cur) => prev + +cur.amount * +cur.quantity,
+  const priceValue = books.reduce(
+    (prev, cur) => prev + +cur.price * +cur.quantity,
     0
   );
   const discountValue = Math.floor(priceValue / 5);
@@ -176,16 +177,19 @@ const Cart = () => {
 
   const placeOrderHandler = () => {
     setIsPlacingOrder(true);
-    addDoc(collection(db, 'orders'), {
+    let orderId = user.uid + '_' + new Date().getMilliseconds();
+    setDoc(doc(db, 'orders', orderId), {
+      userId: user.uid,
       items: cartItems,
       totalPrice: totalValue,
+      date: new Date().toUTCString(),
+      status: 'Order Placed'
     }).then(() => {
       setIsOrderPlaced(true);
 
-      updateDoc(doc(db, user.uid, 'cart'), {
+      updateDoc(doc(db, 'cart', user.uid), {
         items: [],
       }).then(() => {
-        console.log('cart.js // 190');
         setIsPlacingOrder(false);
       });
     });
@@ -204,14 +208,14 @@ const Cart = () => {
       ) : (
         !isLoading &&
         (user ? (
-          clothes.length > 0 ? (
+          books.length > 0 ? (
             <Div>
               <div className="cart">
                 <div className="title">
-                  Cart <span>({clothes.length} items)</span>
+                  Cart <span>({books.length} items)</span>
                 </div>
                 <div className="clothes">
-                  {clothes.map((item, index) => (
+                  {books.map((item, index) => (
                     <CartItemCard key={uniqid()} index={index} {...item} />
                   ))}
                 </div>

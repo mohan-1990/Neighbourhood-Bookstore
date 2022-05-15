@@ -37,7 +37,7 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
-        <title>Tiptop</title>
+        <title>Neighbourhood Bookstore</title>
       </Head>
       <GlobalStyle />
       <Container>

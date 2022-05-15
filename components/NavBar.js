@@ -7,6 +7,7 @@ import BetterLink from './BetterLink';
 import Menu from './Menu';
 import { auth } from '../services/firebase-config';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const Div = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ const Div = styled.div`
           .badge {
             font-size: 10px;
             font-weight: 600;
-            background-color: #4a00e0;
+            background-color: #0d67b5;
             color: white;
             border-radius: 50%;
             width: 18px;
@@ -103,7 +104,7 @@ const Div = styled.div`
       }
 
       &.active {
-        border-bottom-color: #4a00e0;
+        border-bottom-color: #0d67b5;
       }
     }
   }
@@ -164,10 +165,13 @@ const NavBar = () => {
     setIsMenuVisible(false);
   };
 
+  const router = useRouter();
+
   const signOutHandler = () => {
     signOut(auth)
       .then(() => {
         closeMenu();
+        router.replace('/');
       })
       .catch((error) => {
         console.log(error);
@@ -179,7 +183,7 @@ const NavBar = () => {
       <h1 className="title">
         <BetterLink href="/">
           <LogoIcon />
-          <p>tiptop</p>
+          <p>Neighbourhood bookstore</p>
         </BetterLink>
       </h1>
       <div className="box">

@@ -22,13 +22,13 @@ const Div = styled.div`
     height: 82px;
 
     .icon {
-      border: 3px #4a00e0 solid;
+      border: 3px #0d67b5 solid;
       border-radius: 50%;
       padding: 8px;
       width: 64px;
       height: 64px;
       stroke-width: 1.5px;
-      color: #4a00e0;
+      color: #0d67b5;
     }
   }
 
@@ -47,9 +47,9 @@ const Div = styled.div`
     margin-top: 30px;
     padding: 14px 42px;
     text-decoration: none;
-    background: #8e2de2;
-    background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: #64b0f1;
+    background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+    background: linear-gradient(to right, #64b0f1, #0d67b5);
     color: white;
     font-weight: 500;
     border: none;

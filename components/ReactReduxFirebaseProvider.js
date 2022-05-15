@@ -29,14 +29,14 @@ const ReactReduxFirebaseWrapper = ({ children }) => {
           dispatch(authActions.setUser(userInfo));
 
           const wishlistSub = onSnapshot(
-            doc(db, user.uid, 'wishlist'),
+            doc(db, 'wishlist', user.uid),
             (document) => {
               try {
                 const items = document.data().items;
                 dispatch(wishlistActions.setItems(items));
 
                 const cartSub = onSnapshot(
-                  doc(db, user.uid, 'cart'),
+                  doc(db, 'cart', user.uid),
                   (document) => {
                     try {
                       const items = document.data().items;

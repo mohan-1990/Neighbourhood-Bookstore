@@ -4,20 +4,20 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <meta name="title" content="Tiptop" />
-        <meta name="description" content="Online Shopping for Men" />
+        <meta name="title" content="Neighbourhood bookstore" />
+        <meta name="description" content="Online book shopping" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://tiptopstore.vercel.app" />
+        <meta property="og:url" content="https://neighbourhood-bookstore.vercel.app" />
         <meta property="og:title" content="Tiptop" />
-        <meta property="og:description" content="Online Shopping for Men" />
+        <meta property="og:description" content="Online book shopping" />
         <meta
           property="og:image"
           content="https://user-images.githubusercontent.com/48406108/158584944-2fedf004-1425-4aa7-b1ee-46977c3beb19.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://tiptopstore.vercel.app" />
+        <meta name="twitter:url" content="https://neighbourhood-bookstore.vercel.app" />
         <meta name="twitter:title" content="Tiptop" />
-        <meta name="twitter:description" content="Online Shopping for Men" />
+        <meta name="twitter:description" content="Online book shopping" />
         <meta
           name="twitter:image"
           content="https://user-images.githubusercontent.com/48406108/158584944-2fedf004-1425-4aa7-b1ee-46977c3beb19.png"

@@ -1,7 +1,8 @@
-import data from '../pages/api/data.json';
+import { getBookById } from '../services/firebase/dataAccess';
 
-const getItemById = (itemId) => {
-  return data.clothes.find((item) => item.id === itemId);
+const getItemById = async (itemId) => {
+  const book = await getBookById(parseInt(itemId));
+  return book;
 };
 
 export default getItemById;

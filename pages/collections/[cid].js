@@ -8,19 +8,13 @@ import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 import getAllStaticPaths from '../../utils/getAllStaticPaths';
 import getItemById from '../../utils/getItemById';
-import Modal from '../../components/Modal';
 import { db } from '../../services/firebase-config';
-import SizePickerForTops from '../../components/SizePickerForTops';
-import SizePickerForBottoms from '../../components/SizePickerForBottoms';
-import SizeChartForTops from '../../components/SizeChartForTops';
-import SizeChartForBottoms from '../../components/SizeChartForBottoms';
 import { getFormattedCurrency } from '../../utils/getFormattedCurrency';
 
 const MainNav = styled.div`
   font-size: 14px;
   background-color: #f4f4f4;
   padding: 16px;
-  text-align: center;
 
   a {
     text-decoration: none;
@@ -58,7 +52,7 @@ const Div = styled.div`
       margin: 16px;
       padding: 16px;
 
-      .brand {
+      .publisher {
         font-size: 20px;
         font-weight: 500;
       }
@@ -86,7 +80,7 @@ const Div = styled.div`
           }
 
           .chart {
-            color: #4a00e0;
+            color: #0d67b5;
             margin-left: 16px;
             font-size: 14px;
             cursor: pointer;
@@ -129,8 +123,8 @@ const Div = styled.div`
             cursor: pointer;
 
             &.active {
-              border-color: #4a00e0;
-              color: #4a00e0;
+              border-color: #0d67b5;
+              color: #0d67b5;
             }
 
             &:last-child {
@@ -141,7 +135,7 @@ const Div = styled.div`
               transition: border 240ms;
 
               &:hover {
-                border-color: #4a00e0;
+                border-color: #0d67b5;
               }
             }
           }
@@ -167,9 +161,9 @@ const Div = styled.div`
         }
 
         .cart {
-          background: #8e2de2;
-          background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-          background: linear-gradient(to right, #8e2de2, #4a00e0);
+          background: #64b0f1;
+          background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+          background: linear-gradient(to right, #64b0f1, #0d67b5);
           color: white;
           margin-left: 16px;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -187,8 +181,8 @@ const Div = styled.div`
 
         .wishlist {
           background-color: white;
-          border: 1px #4a00e0 solid;
-          color: #4a00e0;
+          border: 1px #0d67b5 solid;
+          color: #0d67b5;
         }
       }
     }
@@ -209,7 +203,7 @@ const Div = styled.div`
         padding: 0;
         margin-bottom: 0;
 
-        .brand {
+        .publisher {
           font-size: 18px;
           font-weight: 500;
         }
@@ -244,7 +238,7 @@ const ModalDiv = styled.div`
   padding: 16px;
 
   .title {
-    color: #4a00e0;
+    color: #0d67b5;
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 16px;
@@ -289,10 +283,7 @@ const ModalDiv = styled.div`
   }
 `;
 
-const ItemDetails = ({ id, imageURL, brand, category, name, amount }) => {
-  const [size, setSize] = useState('');
-  const [showSizeChart, setShowSizeChart] = useState(false);
-  const [promptSize, setPromptSize] = useState(false);
+const ItemDetails = ({ id, imageURL, publisher, category, name, price, author }) => {
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const wishlistItems = useSelector((state) => state.wishlist.items);
@@ -302,27 +293,18 @@ const ItemDetails = ({ id, imageURL, brand, category, name, amount }) => {
   const isWishlisted = !!wishlistItems.find((value) => value.itemId === id);
 
   const cartItem = cartItems.find(
-    (item) => item.itemId === id && item.itemSize === size
+    (item) => item.itemId === id
   );
   const cartItemIndex = cartItems.findIndex(
-    (item) => item.itemId === id && item.itemSize === size
+    (item) => item.itemId === id
   );
   const isInCart = !!cartItem;
 
-  const openSizeChartHandler = () => {
-    setShowSizeChart(true);
-  };
-
-  const closeSizeChartHandler = () => {
-    setShowSizeChart(false);
-  };
-
   const addToWishlistHandler = () => {
     if (user) {
-      updateDoc(doc(db, user.uid, 'wishlist'), {
+      updateDoc(doc(db, 'wishlist', user.uid), {
         items: arrayUnion({
-          itemId: id,
-          itemSize: size || null,
+          itemId: id
         }),
       }).catch((error) => console.log(error));
     } else {
@@ -332,41 +314,35 @@ const ItemDetails = ({ id, imageURL, brand, category, name, amount }) => {
 
   const addToCartHandler = () => {
     if (user) {
-      if (size) {
-        setPromptSize(false);
-        setIsLoading(true);
-        if (isInCart) {
-          const updatedItem = {
-            ...cartItem,
-            itemQuantity: (+cartItem.itemQuantity + 1).toString(),
-          };
-          const updatedItems = [...cartItems];
-          updatedItems.splice(cartItemIndex, 1, updatedItem);
-          updateDoc(doc(db, user.uid, 'cart'), {
-            items: updatedItems,
+      setIsLoading(true);
+      if (isInCart) {
+        const updatedItem = {
+          ...cartItem,
+          itemQuantity: (+cartItem.itemQuantity + 1).toString(),
+        };
+        const updatedItems = [...cartItems];
+        updatedItems.splice(cartItemIndex, 1, updatedItem);
+        updateDoc(doc(db, 'cart', user.uid), {
+          items: updatedItems,
+        })
+          .then(() => {
+            removeItemHandler();
           })
-            .then(() => {
-              removeItemHandler();
-            })
-            .catch((error) => console.log(error))
-            .finally(() => {
-              setIsLoading(false);
-            });
-        } else {
-          updateDoc(doc(db, user.uid, 'cart'), {
-            items: arrayUnion({
-              itemId: id,
-              itemSize: size,
-              itemQuantity: '1',
-            }),
-          })
-            .catch((error) => console.log(error))
-            .finally(() => {
-              setIsLoading(false);
-            });
-        }
+          .catch((error) => console.log(error))
+          .finally(() => {
+            setIsLoading(false);
+          });
       } else {
-        setPromptSize(true);
+        updateDoc(doc(db, 'cart', user.uid), {
+          items: arrayUnion({
+            itemId: id,
+            itemQuantity: '1',
+          }),
+        })
+          .catch((error) => console.log(error))
+          .finally(() => {
+            setIsLoading(false);
+          });
       }
     } else {
       router.push('/signin');
@@ -380,7 +356,7 @@ const ItemDetails = ({ id, imageURL, brand, category, name, amount }) => {
         {' / '}
         <Link href="/collections">Collections</Link>
         {' / '}
-        <span>{` ${brand} ${name}`}</span>
+        <span>{` ${publisher} ${name}`}</span>
       </MainNav>
       <Div>
         <div className="card">
@@ -393,30 +369,11 @@ const ItemDetails = ({ id, imageURL, brand, category, name, amount }) => {
             />
           </div>
           <div className="info">
-            <div className="brand">{brand}</div>
+            <div className="publisher">{publisher}</div>
             <div className="name">{name}</div>
             <div className="amount">{`Rs. ${getFormattedCurrency(
-              amount
+              price
             )}`}</div>
-            <div className="size-box">
-              <div className="head">
-                <div className="title">Select Size</div>
-                <div className="chart" onClick={openSizeChartHandler}>
-                  Size Chart
-                </div>
-              </div>
-              {promptSize && <div className="error">Please select a size</div>}
-              <div className="sizes">
-                {category === 'Jeans' ? (
-                  <SizePickerForBottoms
-                    currentSize={size}
-                    onSetSize={setSize}
-                  />
-                ) : (
-                  <SizePickerForTops currentSize={size} onSetSize={setSize} />
-                )}
-              </div>
-            </div>
             <div className="actions">
               <button
                 className="wishlist"
@@ -436,26 +393,12 @@ const ItemDetails = ({ id, imageURL, brand, category, name, amount }) => {
           </div>
         </div>
       </Div>
-      {showSizeChart && (
-        <Modal closeHandler={closeSizeChartHandler}>
-          <ModalDiv>
-            <div className="title">Size Chart</div>
-            <div className="table">
-              {category === 'Jeans' ? (
-                <SizeChartForBottoms />
-              ) : (
-                <SizeChartForTops />
-              )}
-            </div>
-          </ModalDiv>
-        </Modal>
-      )}
     </>
   );
 };
 
-export const getStaticPaths = () => {
-  const paths = getAllStaticPaths();
+export const getStaticPaths = async () => {
+  const paths = await getAllStaticPaths();
 
   return {
     paths,
@@ -463,9 +406,9 @@ export const getStaticPaths = () => {
   };
 };
 
-export const getStaticProps = (context) => {
+export const getStaticProps = async (context) => {
   const cid = context.params.cid;
-  const item = getItemById(cid);
+  const item = await getItemById(cid);
 
   return {
     props: {

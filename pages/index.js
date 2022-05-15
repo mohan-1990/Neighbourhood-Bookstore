@@ -33,9 +33,9 @@ const Div = styled.div`
     font-weight: 500;
     border: none;
     border-radius: 10px;
-    background: #8e2de2;
-    background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: #64b0f1;
+    background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+    background: linear-gradient(to right, #64b0f1, #0d67b5);
     color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
@@ -45,11 +45,11 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Online Shopping for Men - Tiptop</title>
+        <title>Shops your favourite books online from Neighbourhood bookstore</title>
       </Head>
       <Div>
-        <p className="title">Wear better, look better.</p>
-        <p className="text">Don't you just love being in apparel?</p>
+        <p className="title">Your favorite books in a single place</p>
+        <p className="text">New collections added weekly. Hunderds of books categories!</p>
         <Link href="/collections">Shop Now</Link>
       </Div>
     </>

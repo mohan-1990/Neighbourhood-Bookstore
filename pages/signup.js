@@ -16,7 +16,6 @@ const MainNav = styled.div`
   font-size: 14px;
   background-color: #f4f4f4;
   padding: 16px;
-  text-align: center;
 
   a {
     text-decoration: none;
@@ -104,7 +103,7 @@ const Div = styled.div`
           }
 
           &:focus {
-            border-color: #4a00e0;
+            border-color: #0d67b5;
           }
         }
 
@@ -129,9 +128,9 @@ const Div = styled.div`
 
       button {
         font: inherit;
-        background: #8e2de2;
-        background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-        background: linear-gradient(to right, #8e2de2, #4a00e0);
+        background: #64b0f1;
+        background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+        background: linear-gradient(to right, #64b0f1, #0d67b5);
         color: white;
         font-weight: 500;
         display: flex;
@@ -162,10 +161,9 @@ const Div = styled.div`
       margin-bottom: 16px;
       text-align: center;
       font-size: 14px;
-
       a {
         text-decoration: none;
-        color: #4a00e0;
+        color: #0d67b5;
 
         @media (hover: hover) {
           &:hover {
@@ -240,15 +238,15 @@ const SignUp = () => {
       createUserWithEmailAndPassword(auth, emailInput, passwordInput)
         .then((userCredential) => {
           const uid = userCredential.user.uid;
-          setDoc(doc(db, uid, 'account'), {
+          setDoc(doc(db, 'account', uid), {
             name: nameInput,
             email: emailInput,
           })
             .then(() => {
-              setDoc(doc(db, uid, 'wishlist'), {
+              setDoc(doc(db, 'wishlist', uid), {
                 items: [],
               }).then(() => {
-                setDoc(doc(db, uid, 'cart'), {
+                setDoc(doc(db, 'cart', uid), {
                   items: [],
                 });
               });
