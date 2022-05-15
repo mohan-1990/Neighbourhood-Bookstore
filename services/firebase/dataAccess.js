@@ -1,6 +1,6 @@
-import { db } from '../firebase-config';
+import { db } from './config';
 import { collection, getDocs, where, query } from "firebase/firestore";
-
+import { doc, setDoc } from 'firebase/firestore';
 
 export const getAllBooks = async () => {
     try {
@@ -28,5 +28,39 @@ export const getBookById = async (id) => {
     }
     catch(error) {
         console.log("Error getting book by id: " + id, error);
+    }
+};
+
+export const setAccount = async (uid, nameInput, emailInput) => {
+    try {
+        await setDoc(doc(db, 'account', uid), {
+            name: nameInput,
+            email: emailInput,
+        });
+    }
+    catch(error) {
+        console.log("Error setting wishlist for uid: " + uid, error);
+    }
+};
+
+export const setWishlist = async (uid, items) => {
+    try {
+        await setDoc(doc(db, 'wishlist', uid), {
+            items: [],
+        });
+    }
+    catch(error) {
+        console.log("Error setting wishlist for uid: " + uid, error);
+    }
+};
+
+export const setCart = async (uid, items) => {
+    try {
+        await setDoc(doc(db, 'cart', uid), {
+            items: [],
+        });
+    }
+    catch(error) {
+        console.log("Error setting cart for uid: " + uid, error);
     }
 };

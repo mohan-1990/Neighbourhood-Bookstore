@@ -2,15 +2,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import styled, { keyframes } from 'styled-components';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-
 import { LogoIcon } from '../assets/icons';
 import { validateEmail, validatePassword } from '../utils/formValidation';
-import { auth } from '../services/firebase-config';
-import { db } from '../services/firebase-config';
+import { signUp } from '../services/firebase/signUp';
 
 const MainNav = styled.div`
   font-size: 14px;
@@ -209,7 +205,7 @@ const SignUp = () => {
   const isNameValid = nameInput.length !== 0;
   const isEmailValid = emailInput.length !== 0 && validateEmail(emailInput);
   const isPasswordValid =
-    passwordInput.length !== 0 && validatePassword(passwordInput);
+  passwordInput.length !== 0 && validatePassword(passwordInput);
 
   const nameInputHandler = (ev) => {
     setServerErrorMessage('');
@@ -235,38 +231,24 @@ const SignUp = () => {
 
     if (isNameValid && isEmailValid && isPasswordValid && !serverErrorMessage) {
       setIsLoading(true);
-      createUserWithEmailAndPassword(auth, emailInput, passwordInput)
-        .then((userCredential) => {
-          const uid = userCredential.user.uid;
-          setDoc(doc(db, 'account', uid), {
-            name: nameInput,
-            email: emailInput,
-          })
-            .then(() => {
-              setDoc(doc(db, 'wishlist', uid), {
-                items: [],
-              }).then(() => {
-                setDoc(doc(db, 'cart', uid), {
-                  items: [],
-                });
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+        signUp(nameInput, emailInput, passwordInput)
+        .then(() => {
         })
         .catch((error) => {
-          const errorCode = error.code;
-
-          if (errorCode === 'auth/email-already-in-use') {
-            setServerErrorMessage('Email address already in use.');
-          } else {
-            setServerErrorMessage('Something went wrong.');
-          }
+          handleSignUpErrors(error);
         })
         .finally(() => {
           setIsLoading(false);
         });
+    }
+  };
+
+  const handleSignUpErrors = (error) => {
+    const errorCode = error.code;
+    if (errorCode === 'auth/email-already-in-use') {
+      setServerErrorMessage('Email address already in use.');
+    } else {
+      setServerErrorMessage('Something went wrong.');
     }
   };
 

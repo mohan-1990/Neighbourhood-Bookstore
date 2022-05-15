@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 
-import { auth } from '../services/firebase-config';
+import { auth } from '../services/firebase/config';
 import { authActions } from '../store/authSlice';
 import { wishlistActions } from '../store/wishlistSlice';
 import { cartActions } from '../store/cartSlice';
-import { db } from '../services/firebase-config';
+import { db } from '../services/firebase/config';
 import Loading from './Loading';
 
 const ReactReduxFirebaseWrapper = ({ children }) => {

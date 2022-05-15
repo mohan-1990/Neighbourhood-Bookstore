@@ -100,7 +100,6 @@ const Div = styled.div`
 `;
 
 const Products = ({ books, publishers, categories }) => {
-  console.log("Publishers: " + JSON.stringify(publishers));
   const [width, setWidth] = useState(window.innerWidth);
   const filteredPublishers = useSelector((state) => state.filter.publishers);
   const filteredCategories = useSelector((state) => state.filter.categories);

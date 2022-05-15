@@ -6,7 +6,7 @@ import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
 
 import BetterLink from './BetterLink';
 import { ChevronDownIcon, CloseIcon } from '../assets/icons';
-import { db } from '../services/firebase-config';
+import { db } from '../services/firebase/config';
 import Modal from './Modal';
 import QuantityPicker from './QuantityPicker';
 import { getFormattedCurrency } from '../utils/getFormattedCurrency';

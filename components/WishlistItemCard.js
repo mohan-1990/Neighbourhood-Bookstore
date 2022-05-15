@@ -6,7 +6,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { CloseIcon } from '../assets/icons';
 import BetterLink from './BetterLink';
 import { useSelector } from 'react-redux';
-import { db } from '../services/firebase-config';
+import { db } from '../services/firebase/config';
 import { getFormattedCurrency } from '../utils/getFormattedCurrency';
 
 const Div = styled.div`

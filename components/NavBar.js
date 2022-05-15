@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import { LogoIcon, WishlistIcon, CartIcon, UserIcon } from '../assets/icons';
 import BetterLink from './BetterLink';
 import Menu from './Menu';
-import { auth } from '../services/firebase-config';
+import { auth } from '../services/firebase/config';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 

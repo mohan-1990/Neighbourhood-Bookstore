@@ -2,13 +2,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import styled, { keyframes } from 'styled-components';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-
 import { LogoIcon } from '../assets/icons';
 import { validateEmail, validatePassword } from '../utils/formValidation';
-import { auth } from '../services/firebase-config';
+import { signIn } from '../services/firebase/signIn';
 
 const MainNav = styled.div`
   font-size: 14px;
@@ -272,19 +270,10 @@ const SignIn = () => {
 
     if (isEmailValid && isPasswordValid && !serverErrorMessage) {
       setIsLoading(true);
-      signInWithEmailAndPassword(auth, emailInput, passwordInput)
+      signIn(emailInput, passwordInput)
         .then((user) => {})
         .catch((error) => {
-          const errorCode = error.code;
-          console.log(errorCode);
-
-          if (errorCode === 'auth/user-not-found') {
-            setServerErrorMessage("Account doesn't exist.");
-          } else if (errorCode === 'auth/wrong-password') {
-            setServerErrorMessage('Invalid password.');
-          } else {
-            setServerErrorMessage('Something went wrong.');
-          }
+          handleSignInError(error);
         })
         .finally(() => {
           setIsLoading(false);
@@ -294,25 +283,29 @@ const SignIn = () => {
 
   const signInAsGuestHandler = () => {
     setIsGuestLoading(true);
-    signInWithEmailAndPassword(auth, process.env.NEXT_PUBLIC_GUEST_EMAIL, 
+    signIn(process.env.NEXT_PUBLIC_GUEST_EMAIL, 
       process.env.NEXT_PUBLIC_GUEST_PWD)
       .then((user) => {})
       .catch((error) => {
-        const errorCode = error.code;
-        console.log(errorCode);
-
-        if (errorCode === 'auth/user-not-found') {
-          setServerErrorMessage("Account doesn't exist.");
-        } else if (errorCode === 'auth/wrong-password') {
-          setServerErrorMessage('Invalid password.');
-        } else {
-          setServerErrorMessage('Something went wrong.');
-        }
+        handleSignInError(error);
       })
       .finally(() => {
         setIsGuestLoading(false);
       });
   };
+
+  const handleSignInError = (error) => {
+    const errorCode = error.code;
+    console.log(errorCode);
+
+    if (errorCode === 'auth/user-not-found') {
+      setServerErrorMessage("Account doesn't exist.");
+    } else if (errorCode === 'auth/wrong-password') {
+      setServerErrorMessage('Invalid password.');
+    } else {
+      setServerErrorMessage('Something went wrong.');
+    }
+  }
 
   return (
     <>

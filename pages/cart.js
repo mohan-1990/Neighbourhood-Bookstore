@@ -11,7 +11,7 @@ import CartItemCard from '../components/CartItemCard';
 import SignInPromptTemplate from '../components/SignInPromptTemplate';
 import getItemById from '../utils/getItemById';
 import OrderPlaced from '../components/OrderPlaced';
-import { db } from '../services/firebase-config';
+import { db } from '../services/firebase/config';
 
 const MainNav = styled.div`
   font-size: 14px;

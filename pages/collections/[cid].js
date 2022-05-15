@@ -8,7 +8,7 @@ import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 import getAllStaticPaths from '../../utils/getAllStaticPaths';
 import getItemById from '../../utils/getItemById';
-import { db } from '../../services/firebase-config';
+import { db } from '../../services/firebase/config';
 import { getFormattedCurrency } from '../../utils/getFormattedCurrency';
 
 const MainNav = styled.div`
