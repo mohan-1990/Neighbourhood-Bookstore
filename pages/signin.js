@@ -157,7 +157,7 @@ const Div = styled.div`
         margin-left: 8px;
         width: 14px;
         height: 14px;
-        border: 1.5px solid #4a00e0;
+        border: 1.5px solid #0d67b5;
         border-bottom-color: transparent;
       }
     }
