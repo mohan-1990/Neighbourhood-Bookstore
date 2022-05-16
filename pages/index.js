@@ -45,7 +45,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Shops your favourite books online from Neighbourhood bookstore</title>
+        <title>Shop your favourite books online from Neighbourhood bookstore</title>
       </Head>
       <Div>
         <p className="title">Your favorite books in a single place</p>
