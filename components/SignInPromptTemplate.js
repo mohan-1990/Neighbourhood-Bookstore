@@ -46,7 +46,7 @@ const Div = styled.div`
     margin-top: 30px;
     padding: 14px 42px;
     text-decoration: none;
-    background: #8e2de2;
+    background: #64b0f1;
     background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
     background: linear-gradient(to right, #64b0f1, #0d67b5);
     color: white;

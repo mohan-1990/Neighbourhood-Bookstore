@@ -28,9 +28,9 @@ const Div = styled.div`
     border: none;
     padding: 14px 42px;
     margin: auto;
-    background: #8e2de2;
-    background: -webkit-linear-gradient(to right, #8e2de2, #4a00e0);
-    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: #64b0f1;
+    background: -webkit-linear-gradient(to right, #64b0f1, #0d67b5);
+    background: linear-gradient(to right, #64b0f1, #0d67b5);
     color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;

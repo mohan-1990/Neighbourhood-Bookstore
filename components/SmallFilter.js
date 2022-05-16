@@ -23,7 +23,7 @@ const ModalDiv = styled.div`
   padding: 16px;
 
   .title {
-    color: #4a00e0;
+    color: #0d67b5;
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 16px;
